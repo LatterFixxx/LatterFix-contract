@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Env, String, Vec};
+use soroban_sdk::{contracttype, Address, Env, String, Vec};
 
 /// Storage helper module for the LatterFix TaskManager contract.
 ///
@@ -30,6 +30,28 @@ pub enum StorageKey {
     Categories,
     Tags,
     Statistics,
+    Sep24Session(Address),
+    ClawbackEnabled(Address),
+    ClawbackHistory(Address),
+}
+
+#[contracttype]
+#[derive(Clone, Debug, PartialEq)]
+pub struct Sep24Session {
+    pub account: Address,
+    pub external_anchor_id: String,
+    pub interactive_url: String,
+    pub status: String,
+    pub created_at: u64,
+}
+
+#[contracttype]
+#[derive(Clone, Debug, PartialEq)]
+pub struct ClawbackRecord {
+    pub admin: Address,
+    pub from: Address,
+    pub amount: i128,
+    pub timestamp: u64,
 }
 
 // ── TTL Helpers ────────────────────────────────────────────────────────────
@@ -49,7 +71,7 @@ pub fn calculate_ttl(_env: &Env, is_permanent: bool) -> u32 {
 /// * `key`       — the storage key to extend
 /// * `threshold` — minimum remaining ledgers before extension triggers
 /// * `extend_to` — target TTL to extend to (in ledgers)
-pub fn extend_persistent_ttl<K: soroban_sdk::Val + soroban_sdk::TryFromVal<Env, soroban_sdk::Val>>(
+pub fn extend_persistent_ttl<K>(
     env: &Env,
     key: &K,
     threshold: u32,
@@ -65,16 +87,88 @@ pub fn extend_persistent_ttl<K: soroban_sdk::Val + soroban_sdk::TryFromVal<Env, 
 /// Extend TTL for all core contract statistics on every state change.
 /// Prevents the statistics storage entry from being archived mid-operation.
 pub fn refresh_statistics_ttl(env: &Env) {
-    env.storage()
-        .persistent()
-        .extend_ttl(&StorageKey::Statistics, 100_000, DEFAULT_PERSISTENT_TTL);
+    if env.storage().persistent().has(&StorageKey::Statistics) {
+        env.storage()
+            .persistent()
+            .extend_ttl(&StorageKey::Statistics, 100_000, DEFAULT_PERSISTENT_TTL);
+    }
 }
 
 /// Extend TTL for the categories index after any write.
 pub fn refresh_categories_ttl(env: &Env) {
+    if env.storage().persistent().has(&StorageKey::Categories) {
+        env.storage()
+            .persistent()
+            .extend_ttl(&StorageKey::Categories, 100_000, DEFAULT_PERSISTENT_TTL);
+    }
+}
+
+/// Extend instance TTL for the contract instance.
+pub fn extend_instance_ttl(env: &Env, threshold: u32, extend_to: u32) {
+    env.storage().instance().extend_ttl(threshold, extend_to);
+}
+
+/// Refresh all core TTLs to prevent archival of vital protocol state.
+pub fn refresh_all_core_ttl(env: &Env) {
+    extend_instance_ttl(env, 100_000, DEFAULT_PERSISTENT_TTL);
+    refresh_statistics_ttl(env);
+    refresh_categories_ttl(env);
+}
+
+/// Save an interactive SEP-24 withdrawal session.
+pub fn save_sep24_session(env: &Env, session: &Sep24Session) {
+    env.storage()
+        .temporary()
+        .set(&StorageKey::Sep24Session(session.account.clone()), session);
+}
+
+/// Retrieve an existing SEP-24 session.
+pub fn get_sep24_session(env: &Env, account: &Address) -> Option<Sep24Session> {
+    env.storage()
+        .temporary()
+        .get(&StorageKey::Sep24Session(account.clone()))
+}
+
+/// Set account clawback authorization status.
+pub fn set_account_clawback_status(env: &Env, account: &Address, enabled: bool) {
     env.storage()
         .persistent()
-        .extend_ttl(&StorageKey::Categories, 100_000, DEFAULT_PERSISTENT_TTL);
+        .set(&StorageKey::ClawbackEnabled(account.clone()), &enabled);
+}
+
+/// Query account clawback authorization status.
+pub fn is_account_clawback_enabled(env: &Env, account: &Address) -> bool {
+    env.storage()
+        .persistent()
+        .get(&StorageKey::ClawbackEnabled(account.clone()))
+        .unwrap_or(false)
+}
+
+/// Record an administrative clawback action for audit purposes.
+pub fn record_clawback(env: &Env, admin: &Address, from: &Address, amount: i128) {
+    let mut history: Vec<ClawbackRecord> = env
+        .storage()
+        .persistent()
+        .get(&StorageKey::ClawbackHistory(from.clone()))
+        .unwrap_or_else(|| Vec::new(env));
+    let record = ClawbackRecord {
+        admin: admin.clone(),
+        from: from.clone(),
+        amount,
+        timestamp: env.ledger().timestamp(),
+    };
+    history.push_back(record);
+    env.storage()
+        .persistent()
+        .set(&StorageKey::ClawbackHistory(from.clone()), &history);
+}
+
+/// Retrieve clawback audit records for an account.
+pub fn get_clawback_history(env: &Env, account: &Address) -> Vec<ClawbackRecord> {
+    env.storage()
+        .persistent()
+        .get(&StorageKey::ClawbackHistory(account.clone()))
+        .unwrap_or_else(|| Vec::new(env))
 }
 
 // ── Storage Metadata ───────────────────────────────────────────────────────

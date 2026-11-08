@@ -241,7 +241,7 @@ impl TaskManagerContract {
                 env.clone(),
                 task_id,
                 milestone_title.clone(),
-                *amount,
+                amount,
                 None,
             );
         }
@@ -788,6 +788,98 @@ impl TaskManagerContract {
     
     pub fn get_statistics(env: Env) -> storage::ContractStatistics {
         storage::get_statistics(&env)
+    }
+
+    // ── Contract State Archival Strategy (Issue #25) ────────────────────────
+    
+    /// Bumps the contract instance TTL to prevent archival.
+    pub fn bump_contract_instance_ttl(env: Env) {
+        storage::extend_instance_ttl(&env, 100_000, storage::DEFAULT_PERSISTENT_TTL);
+    }
+    
+    /// Refreshes TTL across vital contract statistics and categories to protect against state expiration.
+    pub fn refresh_archival_ttl(env: Env) {
+        storage::refresh_all_core_ttl(&env);
+    }
+
+    // ── ORGUSD Asset Clawback Support (Issue #13) ───────────────────────────
+
+    /// Enables or disables clawback capability for a specific account.
+    pub fn set_account_clawback_enabled(env: Env, admin: Address, account: Address, enabled: bool) {
+        admin.require_auth();
+        let stored_admin: Address = env
+            .storage()
+            .instance()
+            .get(&access_control::AccessControlKey::Admin)
+            .unwrap_or_else(|| panic!("not initialized"));
+        if admin != stored_admin {
+            panic!("only admin can manage clawback status");
+        }
+        storage::set_account_clawback_status(&env, &account, enabled);
+    }
+
+    /// Queries whether clawback operations are enabled for the specified account.
+    pub fn is_account_clawback_enabled(env: Env, account: Address) -> bool {
+        storage::is_account_clawback_enabled(&env, &account)
+    }
+
+    /// Executes an administrative clawback operation for regulatory compliance or error correction.
+    pub fn clawback_asset(env: Env, admin: Address, from: Address, amount: i128) {
+        admin.require_auth();
+        let stored_admin: Address = env
+            .storage()
+            .instance()
+            .get(&access_control::AccessControlKey::Admin)
+            .unwrap_or_else(|| panic!("not initialized"));
+        if admin != stored_admin {
+            panic!("only admin can perform clawback");
+        }
+        assert!(amount > 0, "clawback amount must be positive");
+
+        if !storage::is_account_clawback_enabled(&env, &from) {
+            panic!("clawback not enabled for this account");
+        }
+
+        storage::record_clawback(&env, &admin, &from, amount);
+        events::emit_clawback_executed(&env, admin, from, amount);
+    }
+
+    /// Retrieves the historical clawback audit records for a given account.
+    pub fn get_clawback_history(env: Env, account: Address) -> Vec<storage::ClawbackRecord> {
+        storage::get_clawback_history(&env, &account)
+    }
+
+    // ── Anchor SEP-24 Fiat Withdrawal Protocol (Issue #6) ───────────────────
+
+    /// Registers an interactive SEP-24 fiat withdrawal session for off-chain anchor cash-out routing.
+    pub fn init_sep24_withdrawal(
+        env: Env,
+        account: Address,
+        anchor_id: String,
+        interactive_url: String,
+    ) {
+        account.require_auth();
+        pausable::require_not_paused(
+            env.clone(),
+            pausable::PauseAction::Withdraw,
+            Some(account.clone()),
+        );
+
+        let session = storage::Sep24Session {
+            account: account.clone(),
+            external_anchor_id: anchor_id.clone(),
+            interactive_url,
+            status: String::from_str(&env, "pending_interactive"),
+            created_at: env.ledger().timestamp(),
+        };
+
+        storage::save_sep24_session(&env, &session);
+        events::emit_sep24_session_created(&env, account, anchor_id);
+    }
+
+    /// Fetches an active SEP-24 withdrawal session for a user account.
+    pub fn get_sep24_withdrawal_session(env: Env, account: Address) -> Option<storage::Sep24Session> {
+        storage::get_sep24_session(&env, &account)
     }
 }
 

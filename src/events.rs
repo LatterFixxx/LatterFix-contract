@@ -324,3 +324,28 @@ pub fn emit_contract_initialized(
         (fee_bps, env.ledger().timestamp()),
     );
 }
+
+/// Emitted when an authorized administrator executes an asset clawback operation.
+pub fn emit_clawback_executed(
+    env: &Env,
+    admin: Address,
+    from: Address,
+    amount: i128,
+) {
+    env.events().publish(
+        (symbol_short!("clawback"), admin),
+        (from, amount, env.ledger().timestamp()),
+    );
+}
+
+/// Emitted when a user initiates an anchor SEP-24 fiat withdrawal flow.
+pub fn emit_sep24_session_created(
+    env: &Env,
+    account: Address,
+    anchor_id: String,
+) {
+    env.events().publish(
+        (symbol_short!("sep24_in"), account),
+        (anchor_id, env.ledger().timestamp()),
+    );
+}
