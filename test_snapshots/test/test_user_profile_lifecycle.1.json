@@ -178,6 +178,296 @@
             "key": {
               "vec": [
                 {
+                  "symbol": "Config"
+                }
+              ]
+            },
+            "durability": "persistent"
+          }
+        },
+        [
+          {
+            "last_modified_ledger_seq": 0,
+            "data": {
+              "contract_data": {
+                "ext": "v0",
+                "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
+                "key": {
+                  "vec": [
+                    {
+                      "symbol": "Config"
+                    }
+                  ]
+                },
+                "durability": "persistent",
+                "val": {
+                  "map": [
+                    {
+                      "key": {
+                        "symbol": "min_reputation_to_propose"
+                      },
+                      "val": {
+                        "u32": 100
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "min_reputation_to_vote"
+                      },
+                      "val": {
+                        "u32": 50
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "quorum"
+                      },
+                      "val": {
+                        "u32": 10
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "threshold"
+                      },
+                      "val": {
+                        "u32": 51
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "voting_period"
+                      },
+                      "val": {
+                        "u64": 604800
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ext": "v0"
+          },
+          4095
+        ]
+      ],
+      [
+        {
+          "contract_data": {
+            "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
+            "key": {
+              "vec": [
+                {
+                  "symbol": "ReputationTiers"
+                }
+              ]
+            },
+            "durability": "persistent"
+          }
+        },
+        [
+          {
+            "last_modified_ledger_seq": 0,
+            "data": {
+              "contract_data": {
+                "ext": "v0",
+                "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
+                "key": {
+                  "vec": [
+                    {
+                      "symbol": "ReputationTiers"
+                    }
+                  ]
+                },
+                "durability": "persistent",
+                "val": {
+                  "vec": [
+                    {
+                      "map": [
+                        {
+                          "key": {
+                            "symbol": "badge_url"
+                          },
+                          "val": "void"
+                        },
+                        {
+                          "key": {
+                            "symbol": "max_points"
+                          },
+                          "val": {
+                            "u32": 99
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "min_points"
+                          },
+                          "val": {
+                            "u32": 0
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "name"
+                          },
+                          "val": {
+                            "string": "Newcomer"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "map": [
+                        {
+                          "key": {
+                            "symbol": "badge_url"
+                          },
+                          "val": "void"
+                        },
+                        {
+                          "key": {
+                            "symbol": "max_points"
+                          },
+                          "val": {
+                            "u32": 499
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "min_points"
+                          },
+                          "val": {
+                            "u32": 100
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "name"
+                          },
+                          "val": {
+                            "string": "Contributor"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "map": [
+                        {
+                          "key": {
+                            "symbol": "badge_url"
+                          },
+                          "val": "void"
+                        },
+                        {
+                          "key": {
+                            "symbol": "max_points"
+                          },
+                          "val": {
+                            "u32": 999
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "min_points"
+                          },
+                          "val": {
+                            "u32": 500
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "name"
+                          },
+                          "val": {
+                            "string": "Expert"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "map": [
+                        {
+                          "key": {
+                            "symbol": "badge_url"
+                          },
+                          "val": "void"
+                        },
+                        {
+                          "key": {
+                            "symbol": "max_points"
+                          },
+                          "val": {
+                            "u32": 2499
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "min_points"
+                          },
+                          "val": {
+                            "u32": 1000
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "name"
+                          },
+                          "val": {
+                            "string": "Master"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "map": [
+                        {
+                          "key": {
+                            "symbol": "badge_url"
+                          },
+                          "val": "void"
+                        },
+                        {
+                          "key": {
+                            "symbol": "max_points"
+                          },
+                          "val": {
+                            "u32": 4294967295
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "min_points"
+                          },
+                          "val": {
+                            "u32": 2500
+                          }
+                        },
+                        {
+                          "key": {
+                            "symbol": "name"
+                          },
+                          "val": {
+                            "string": "Legend"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "ext": "v0"
+          },
+          4095
+        ]
+      ],
+      [
+        {
+          "contract_data": {
+            "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
+            "key": {
+              "vec": [
+                {
                   "symbol": "UserProfile"
                 },
                 {
@@ -218,6 +508,12 @@
                     },
                     {
                       "key": {
+                        "symbol": "avatar_url"
+                      },
+                      "val": "void"
+                    },
+                    {
+                      "key": {
                         "symbol": "bio"
                       },
                       "val": {
@@ -242,10 +538,29 @@
                     },
                     {
                       "key": {
+                        "symbol": "last_updated"
+                      },
+                      "val": {
+                        "u64": 0
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "reputation"
                       },
                       "val": {
                         "u32": 125
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "total_earnings"
+                      },
+                      "val": {
+                        "i128": {
+                          "hi": 0,
+                          "lo": 0
+                        }
                       }
                     },
                     {
@@ -262,7 +577,7 @@
             },
             "ext": "v0"
           },
-          4095
+          2073600
         ]
       ],
       [
@@ -825,6 +1140,36 @@
       "event": {
         "ext": "v0",
         "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
+        "type_": "contract",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "prof_cre"
+              },
+              {
+                "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDR4"
+              }
+            ],
+            "data": {
+              "vec": [
+                {
+                  "string": "john_doe"
+                },
+                {
+                  "u64": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
         "type_": "diagnostic",
         "body": {
           "v0": {
@@ -895,6 +1240,12 @@
                 },
                 {
                   "key": {
+                    "symbol": "avatar_url"
+                  },
+                  "val": "void"
+                },
+                {
+                  "key": {
                     "symbol": "bio"
                   },
                   "val": {
@@ -919,10 +1270,29 @@
                 },
                 {
                   "key": {
+                    "symbol": "last_updated"
+                  },
+                  "val": {
+                    "u64": 0
+                  }
+                },
+                {
+                  "key": {
                     "symbol": "reputation"
                   },
                   "val": {
                     "u32": 100
+                  }
+                },
+                {
+                  "key": {
+                    "symbol": "total_earnings"
+                  },
+                  "val": {
+                    "i128": {
+                      "hi": 0,
+                      "lo": 0
+                    }
                   }
                 },
                 {
@@ -965,6 +1335,36 @@
                 },
                 {
                   "string": "Soroban developer"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
+        "type_": "contract",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "prof_upd"
+              },
+              {
+                "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDR4"
+              }
+            ],
+            "data": {
+              "vec": [
+                {
+                  "string": "bio"
+                },
+                {
+                  "u64": 0
                 }
               ]
             }
@@ -1047,6 +1447,12 @@
                 },
                 {
                   "key": {
+                    "symbol": "avatar_url"
+                  },
+                  "val": "void"
+                },
+                {
+                  "key": {
                     "symbol": "bio"
                   },
                   "val": {
@@ -1071,10 +1477,29 @@
                 },
                 {
                   "key": {
+                    "symbol": "last_updated"
+                  },
+                  "val": {
+                    "u64": 0
+                  }
+                },
+                {
+                  "key": {
                     "symbol": "reputation"
                   },
                   "val": {
                     "u32": 100
+                  }
+                },
+                {
+                  "key": {
+                    "symbol": "total_earnings"
+                  },
+                  "val": {
+                    "i128": {
+                      "hi": 0,
+                      "lo": 0
+                    }
                   }
                 },
                 {
@@ -1132,6 +1557,39 @@
       "event": {
         "ext": "v0",
         "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
+        "type_": "contract",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "rep_award"
+              },
+              {
+                "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDR4"
+              }
+            ],
+            "data": {
+              "vec": [
+                {
+                  "u32": 25
+                },
+                {
+                  "u32": 100
+                },
+                {
+                  "u64": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
         "type_": "diagnostic",
         "body": {
           "v0": {
@@ -1202,6 +1660,12 @@
                 },
                 {
                   "key": {
+                    "symbol": "avatar_url"
+                  },
+                  "val": "void"
+                },
+                {
+                  "key": {
                     "symbol": "bio"
                   },
                   "val": {
@@ -1226,10 +1690,29 @@
                 },
                 {
                   "key": {
+                    "symbol": "last_updated"
+                  },
+                  "val": {
+                    "u64": 0
+                  }
+                },
+                {
+                  "key": {
                     "symbol": "reputation"
                   },
                   "val": {
                     "u32": 125
+                  }
+                },
+                {
+                  "key": {
+                    "symbol": "total_earnings"
+                  },
+                  "val": {
+                    "i128": {
+                      "hi": 0,
+                      "lo": 0
+                    }
                   }
                 },
                 {
